@@ -1,7 +1,7 @@
 import binascii
 import random
 
-# 'rb' = 'read' + 'binary'
+# 'rb' = 'read' + 'binary'; import file here
 with open('beat_1_bip_2_F.mp3', 'rb') as input_file:
     hexdata = input_file.read().hex()
 
@@ -17,8 +17,10 @@ output_hex = []
 for frame in frames[1:]:
     output_hex.append(header)
     for idx, digit in enumerate(frame):
+        # according to probability, glitch an entire octet
         if idx % 8 == 0:
             testval = random.randrange(100)
+        # comparison for testval; idx must be greater than 0 to avoid glitching whole file's header
         if testval < 5 and idx > 0:
             digit = random.choice('0123456789abcdef')
         output_hex.append(digit)
