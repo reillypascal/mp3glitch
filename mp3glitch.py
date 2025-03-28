@@ -9,6 +9,8 @@ parser.add_argument("output", help="output mp3 file name")
 parser.add_argument("-p", "--prob", help="percent probability of glitching (float)", type=float)
 parser.add_argument("-m", "--hexmin", help="minimum hex value to insert (int)", type=int)
 parser.add_argument("-M", "--hexmax", help="maximum hex value to insert (int)", type=int)
+parser.add_argument("-f", "--framemin", help="minimum position in frame to glitch (float, 0-1)", type=float)
+parser.add_argument("-F", "--framemax", help="maximum position in frame to glitch (float, 0-1)", type=float)
 parser.add_argument("-w", "--width", help="number of hex digits to insert in each glitch (int)", type=int)
 parser.add_argument("-l", "--limit", help="max number of glitches per frame (0 = no limit) (int)", type=int)
 # key-value pairs with argument long names and values
@@ -37,6 +39,14 @@ hex_max = 16
 if args.hexmax:
     hex_max = args.hexmax
 
+frame_min = 0
+if args.framemin:
+    frame_min = args.framemin
+
+frame_max = 1
+if args.framemax:
+    frame_max = args.framemax
+
 glitch_width = 8
 if args.width:
     glitch_width = args.width
@@ -54,22 +64,28 @@ testval = 0
 output_hex = []
 
 # start from index 1 - first index is blank
-for frame in frames[1:]:
+for idx, frame in enumerate(frames[1:]):
     output_hex.append(header)
-    num_glitches_this_frame = 0
-    for idx, digit in enumerate(frame):
-        # according to probability, glitch selected length 
-        if idx % glitch_width == 0:
-            testval = random.uniform(0,100)
-            if testval < glitch_prob:
-                num_glitches_this_frame += 1
-        # comparison for testval; 
-        # - glitch_prob must be true
-        # - ternary statement: compare number of glitches per frame w/ max allowed *unless* max is zero, then always true
-        # - idx must be greater than 0 to avoid glitching whole file's header
-        if testval < glitch_prob and (True, num_glitches_this_frame <= max_glitches_per_frame)[max_glitches_per_frame > 0] and idx > 0:
-            digit = random.choice(hex_digits[hex_min:hex_max + 1])
-        output_hex.append(digit)
+    # don't glitch first frame (file header)
+    if idx > 0:
+        num_glitches_this_frame = 0
+        for idx, digit in enumerate(frame):
+            # according to probability, glitch selected length 
+            if idx % glitch_width == 0:
+                testval = random.uniform(0,100)
+                if testval < glitch_prob:
+                    num_glitches_this_frame += 1
+            # - glitch_prob must be true
+            # - ternary statement: compare number of glitches per frame w/ max allowed *unless* max is zero, then always true
+            # - idx must be between given min/max
+            if (
+                testval < glitch_prob and 
+                (True, num_glitches_this_frame <= max_glitches_per_frame)[max_glitches_per_frame > 0] and 
+                idx >= (len(frame) * frame_min) and
+                idx <= (len(frame) * frame_max)
+            ):
+                digit = random.choice(hex_digits[hex_min:hex_max + 1])
+            output_hex.append(digit)
 
 # join frames using header as separator - note method is applied to separator, not iterable item!
 rejoined_frames = ''.join(output_hex)
