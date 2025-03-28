@@ -5,6 +5,11 @@ import random
 parser = argparse.ArgumentParser()
 parser.add_argument("input", help="mp3 file to be glitched")
 parser.add_argument("output", help="output mp3 file name")
+parser.add_argument("-p", "--prob", help="percent probability of glitching (float)", type=float)
+parser.add_argument("-m", "--hexmin", help="minimum hex value to insert (int)", type=int)
+parser.add_argument("-M", "--hexmax", help="maximum hex value to insert (int)", type=int)
+parser.add_argument("-w", "--width", help="number of hex digits to insert in each glitch (int)", type=int)
+parser.add_argument("-l", "--limit", help="max number of glitches per frame (0 = no limit) (int)", type=int)
 args = parser.parse_args()
 
 # args.input is first cli positional argument
@@ -12,18 +17,35 @@ args = parser.parse_args()
 with open(args.input, 'rb') as input_file:
     hexdata = input_file.read().hex()
 
-# take first 8 characters - that's the header
+# take first 8 characters - that's the header (in CBR MP3s, at least)
 header = hexdata[:8]
 # split at header, removing it
 frames = hexdata.split(header)
 
-hex_digits = '0123456789abcdef'
-glitch_width = 8
-max_glitches_per_frame = 0
-num_glitches_this_frame = 0
+# argument variables
 glitch_prob = 5
+if args.prob:
+    glitch_prob = args.prob
+
 hex_min = 0
+if args.hexmin:
+    hex_min = args.hexmin
+
 hex_max = 16
+if args.hexmax:
+    hex_max = args.hexmax
+
+glitch_width = 8
+if args.width:
+    glitch_width = args.width
+
+max_glitches_per_frame = 0
+if args.limit:
+    max_glitches_per_frame = args.limit
+
+# preset variables
+hex_digits = '0123456789abcdef'
+num_glitches_this_frame = 0
 # need testval defined outside test block
 testval = 0
 # strings are immutable, so need a new array
@@ -44,7 +66,7 @@ for frame in frames[1:]:
         # - ternary statement: compare number of glitches per frame w/ max allowed *unless* max is zero, then always true
         # - idx must be greater than 0 to avoid glitching whole file's header
         if testval < glitch_prob and (True, num_glitches_this_frame <= max_glitches_per_frame)[max_glitches_per_frame > 0] and idx > 0:
-            digit = random.choice(hex_digits[hex_min:hex_max])
+            digit = random.choice(hex_digits[hex_min:hex_max + 1])
         output_hex.append(digit)
 
 # join frames using header as separator - note method is applied to separator, not iterable item!
