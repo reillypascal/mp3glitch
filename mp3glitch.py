@@ -2,6 +2,7 @@ import argparse
 import binascii
 import random
 
+# both positional and optional arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("input", help="mp3 file to be glitched")
 parser.add_argument("output", help="output mp3 file name")
@@ -10,6 +11,7 @@ parser.add_argument("-m", "--hexmin", help="minimum hex value to insert (int)", 
 parser.add_argument("-M", "--hexmax", help="maximum hex value to insert (int)", type=int)
 parser.add_argument("-w", "--width", help="number of hex digits to insert in each glitch (int)", type=int)
 parser.add_argument("-l", "--limit", help="max number of glitches per frame (0 = no limit) (int)", type=int)
+# key-value pairs with argument long names and values
 args = parser.parse_args()
 
 # args.input is first cli positional argument
