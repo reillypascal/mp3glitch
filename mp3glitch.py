@@ -1,8 +1,15 @@
+import argparse
 import binascii
 import random
 
+parser = argparse.ArgumentParser()
+parser.add_argument("input", help="mp3 file to be glitched")
+parser.add_argument("output", help="output mp3 file name")
+args = parser.parse_args()
+
+# args.input is first cli positional argument
 # 'rb' = 'read' + 'binary'; import file here; read as hex
-with open('beat_1_bip_2_F.mp3', 'rb') as input_file:
+with open(args.input, 'rb') as input_file:
     hexdata = input_file.read().hex()
 
 # take first 8 characters - that's the header
@@ -21,6 +28,7 @@ hex_max = 16
 testval = 0
 # strings are immutable, so need a new array
 output_hex = []
+
 # start from index 1 - first index is blank
 for frame in frames[1:]:
     output_hex.append(header)
@@ -41,9 +49,9 @@ for frame in frames[1:]:
 
 # join frames using header as separator - note method is applied to separator, not iterable item!
 rejoined_frames = ''.join(output_hex)
-# need to use 'wb' to get it to write as *binary*, not text
-# binascii.unhexlify converts ascii hex -> binary
-with open('binary_mp3.mp3', 'wb') as output_file:
+# 'wb' = 'write' + 'binary'; binascii.unhexlify converts ascii hex -> binary
+# args.output is second cli positional argument
+with open(args.output, 'wb') as output_file:
     output_file.write(binascii.unhexlify(rejoined_frames))
 
 # write to text file for diagnostics
