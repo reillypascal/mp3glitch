@@ -64,28 +64,29 @@ testval = 0
 output_hex = []
 
 # start from index 1 - first index is blank
-for idx, frame in enumerate(frames[1:]):
+for idx_frame, frame in enumerate(frames[1:]):
     output_hex.append(header)
-    # don't glitch first frame (file header)
-    if idx > 0:
-        num_glitches_this_frame = 0
-        for idx, digit in enumerate(frame):
+    num_glitches_this_frame = 0
+    for idx_digit, digit in enumerate(frame):
+        # don't glitch first frame (file header)
+        if idx_frame > 0:
             # according to probability, glitch selected length 
-            if idx % glitch_width == 0:
+            if idx_digit % glitch_width == 0:
                 testval = random.uniform(0,100)
                 if testval < glitch_prob:
                     num_glitches_this_frame += 1
             # - glitch_prob must be true
             # - ternary statement: compare number of glitches per frame w/ max allowed *unless* max is zero, then always true
-            # - idx must be between given min/max
+            # - idx_digit must be between given min/max
             if (
                 testval < glitch_prob and 
                 (True, num_glitches_this_frame <= max_glitches_per_frame)[max_glitches_per_frame > 0] and 
-                idx >= (len(frame) * frame_min) and
-                idx <= (len(frame) * frame_max)
+                idx_digit >= (len(frame) * frame_min) and
+                idx_digit <= (len(frame) * frame_max)
             ):
                 digit = random.choice(hex_digits[hex_min:hex_max + 1])
-            output_hex.append(digit)
+        # append digit regardless of glitching
+        output_hex.append(digit)
 
 # join frames using header as separator - note method is applied to separator, not iterable item!
 rejoined_frames = ''.join(output_hex)
@@ -95,5 +96,7 @@ with open(args.output, 'wb') as output_file:
     output_file.write(binascii.unhexlify(rejoined_frames))
 
 # write to text file for diagnostics
-# with open('binary_mp3.txt', 'w') as output_file: 
+# with open('input_mp3.txt', 'w') as output_file_raw:
+#     output_file_raw.write(hexdata)
+# with open('output_mp3.txt', 'w') as output_file: 
 #     output_file.write(rejoined_frames)
