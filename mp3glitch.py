@@ -7,8 +7,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("input", help="mp3 file to be glitched")
 parser.add_argument("output", help="output mp3 file name")
 parser.add_argument("-p", "--prob", help="percent probability of glitching (float)", type=float)
-parser.add_argument("-m", "--hexmin", help="minimum hex value to insert (int)", type=int)
-parser.add_argument("-M", "--hexmax", help="maximum hex value to insert (int)", type=int)
+parser.add_argument("-m", "--hexmin", help="decimal representation of minimum hex value to insert (int)", type=int)
+parser.add_argument("-M", "--hexmax", help="decimal representation of maximum hex value to insert (int)", type=int)
 parser.add_argument("-f", "--framemin", help="minimum position in frame to glitch (float, 0-1)", type=float)
 parser.add_argument("-F", "--framemax", help="maximum position in frame to glitch (float, 0-1)", type=float)
 parser.add_argument("-s", "--spacingmin", help="minimum spacing between glitched frames", type=int)
@@ -49,10 +49,6 @@ frame_max = 1
 if args.framemax:
     frame_max = args.framemax
 
-glitch_width = 8
-if args.width:
-    glitch_width = args.width
-
 frame_spacing_min = 1
 if args.spacingmin:
     frame_spacing_min = args.spacingmin
@@ -60,6 +56,12 @@ if args.spacingmin:
 frame_spacing_max = 2
 if args.spacingmax:
     frame_spacing_max = args.spacingmax
+
+glitch_width = 8
+if args.width:
+    glitch_width = args.width
+
+# single-number glitch max is 4294967295 (0xffffffff)
 
 max_glitches_per_frame = 0
 if args.limit:
