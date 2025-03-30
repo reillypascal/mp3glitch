@@ -62,6 +62,7 @@ if args.width:
     glitch_width = args.width
 
 # single-number glitch max is 4294967295 (0xffffffff)
+# more generally, pow(16, glitch_width) - 1
 
 max_glitches_per_frame = 0
 if args.limit:
