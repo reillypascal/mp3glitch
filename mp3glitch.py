@@ -11,6 +11,8 @@ parser.add_argument("-m", "--hexmin", help="minimum hex value to insert (int)", 
 parser.add_argument("-M", "--hexmax", help="maximum hex value to insert (int)", type=int)
 parser.add_argument("-f", "--framemin", help="minimum position in frame to glitch (float, 0-1)", type=float)
 parser.add_argument("-F", "--framemax", help="maximum position in frame to glitch (float, 0-1)", type=float)
+parser.add_argument("-s", "--spacingmin", help="minimum spacing between glitched frames", type=int)
+parser.add_argument("-S", "--spacingmax", help="maximum spacing between glitched frames", type=int)
 parser.add_argument("-w", "--width", help="number of hex digits to insert in each glitch (int)", type=int)
 parser.add_argument("-l", "--limit", help="max number of glitches per frame (0 = no limit) (int)", type=int)
 # key-value pairs with argument long names and values
@@ -51,63 +53,56 @@ glitch_width = 8
 if args.width:
     glitch_width = args.width
 
-freq_spacing = 1
+frame_spacing_min = 1
+if args.spacingmin:
+    frame_spacing_min = args.spacingmin
 
-freq_spacing_min = 1
-
-freq_spacing_max = 8
-
-frame_spacing = 2
-
-frame_spacing_min = 2
-
-frame_spacing_max = 12
+frame_spacing_max = 2
+if args.spacingmax:
+    frame_spacing_max = args.spacingmax
 
 max_glitches_per_frame = 0
 if args.limit:
     max_glitches_per_frame = args.limit
 
-# preset variables
 hex_digits = '0123456789abcdef'
-num_glitches_this_frame = 0
-# need testval defined outside test block
-testval = 0
 # strings are immutable, so need a new array
 output_hex = []
 
+# variables defined outside test block
+num_glitches_this_frame = 0
+testval = 0
 frame_counter = 0
-freq_counter = 0
-glitch_width_counter = 0
+frame_spacing = 1
+
 # start from index 1 - first index is blank
 for idx_frame, frame in enumerate(frames[1:]):
+    # once per frame
     output_hex.append(header)
     num_glitches_this_frame = 0
     for idx_digit, digit in enumerate(frame):
         # don't glitch first frame (file header)
         if idx_frame > 0:
-            # - idx_digit must be between given min/max
+            # new chance to glitch every (glitch_width) digits; count num per frame
+            if idx_digit % glitch_width == 0:
+                testval = random.uniform(0,100)
+                if testval < glitch_prob:
+                    num_glitches_this_frame += 1
+            # perform glitch if testval, not to many glitches for this frame
+            # within min/max freq, frame counter is 0
             if (
+                testval < glitch_prob and 
+                (True, num_glitches_this_frame <= max_glitches_per_frame)[max_glitches_per_frame > 0] and 
                 idx_digit >= (len(frame) * frame_min) and
-                idx_digit <= (len(frame) * frame_max)
+                idx_digit <= (len(frame) * frame_max) and
+                frame_counter == 0
             ):
-                # choose new frame/freq spacings when respective counters are 0
-                if frame_counter == 0:
-                    frame_spacing = random.randrange(frame_spacing_min, frame_spacing_max)
-                if freq_counter == 0:
-                    freq_spacing = random.randrange(freq_spacing_min, freq_spacing_max)
-                # when frame/freq counters both indicate to start, reset glitch width counter
-                if frame_counter == 0 and freq_counter == 0:
-                    glitch_width_counter = 0
-                # 
-                if glitch_width_counter < glitch_width:
-                    digit = random.choice(hex_digits[hex_min:hex_max + 1])
-                    glitch_width_counter += 1
-            # if no longer glitching digits, start counting until next time in frequency spectrum
-            if glitch_width_counter >= glitch_width:
-                freq_counter += 1
-                freq_counter %= freq_spacing
+                digit = random.choice(hex_digits[hex_min:hex_max + 1])
         # append digit regardless of glitching
         output_hex.append(digit)
+    # choose new frame spacing when counter is 0; increment, wrap (run once per frame)
+    if frame_counter == 0:
+        frame_spacing = random.randrange(frame_spacing_min, frame_spacing_max)
     frame_counter += 1
     frame_counter %= frame_spacing
 
