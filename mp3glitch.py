@@ -1,3 +1,7 @@
+# NOTES:
+# single-number glitch max is 4294967295 (0xffffffff)
+# more generally, pow(16, glitch_width) - 1
+
 import argparse
 import binascii
 import random
@@ -53,16 +57,13 @@ frame_spacing_min = 1
 if args.spacingmin:
     frame_spacing_min = args.spacingmin
 
-frame_spacing_max = 2
+frame_spacing_max = 1
 if args.spacingmax:
     frame_spacing_max = args.spacingmax
 
 glitch_width = 8
 if args.width:
     glitch_width = args.width
-
-# single-number glitch max is 4294967295 (0xffffffff)
-# more generally, pow(16, glitch_width) - 1
 
 max_glitches_per_frame = 0
 if args.limit:
@@ -103,9 +104,9 @@ for idx_frame, frame in enumerate(frames[1:]):
                 digit = random.choice(hex_digits[hex_min:hex_max + 1])
         # append digit regardless of glitching
         output_hex.append(digit)
-    # choose new frame spacing when counter is 0; increment, wrap (run once per frame)
+    # choose new frame spacing when counter is 0 - max is +1 because randrange is non-inclusive; increment, wrap (run once per frame)
     if frame_counter == 0:
-        frame_spacing = random.randrange(frame_spacing_min, frame_spacing_max)
+        frame_spacing = random.randrange(frame_spacing_min, frame_spacing_max + 1)
     frame_counter += 1
     frame_counter %= frame_spacing
 
