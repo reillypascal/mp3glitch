@@ -2,4 +2,7 @@
 input_mp3.txt
 output_mp3.txt
 glitched.mp3
+output.mp3
 test.py
+input/
+output/

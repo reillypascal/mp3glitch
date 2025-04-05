@@ -104,7 +104,7 @@ for idx_frame, frame in enumerate(frames[1:]):
                 digit = random.choice(hex_digits[hex_min:hex_max + 1])
         # append digit regardless of glitching
         output_hex.append(digit)
-    # choose new frame spacing when counter is 0 - max is +1 because randrange is non-inclusive; increment, wrap (run once per frame)
+    # choose new frame spacing when counter is 0 (max is +1 because randrange is non-inclusive); increment, wrap (run once per frame)
     if frame_counter == 0:
         frame_spacing = random.randrange(frame_spacing_min, frame_spacing_max + 1)
     frame_counter += 1
