@@ -29,6 +29,14 @@ with open(args.input, 'rb') as input_file:
 
 # take first 8 characters - that's the header (in CBR MP3s, at least)
 header = hexdata[:8]
+header_start_indices = []
+header_start_index = 0
+while hexdata.find("fff", header_start_index) >= 0:
+    header_start_index = hexdata.find("fff", header_start_index)
+    if header_start_index >= 0:
+        header_start_indices.append(header_start_index)
+    header_start_index += 8
+
 # split at header, removing it
 frames = hexdata.split(header)
 
