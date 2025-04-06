@@ -27,8 +27,6 @@ args = parser.parse_args()
 with open(args.input, 'rb') as input_file:
     hexdata = input_file.read().hex()
 
-# take first 8 characters - that's the header (in CBR MP3s, at least)
-header = hexdata[:8]
 header_start_indices = []
 header_start_index = 0
 while hexdata.find("fff", header_start_index) >= 0:
@@ -37,8 +35,9 @@ while hexdata.find("fff", header_start_index) >= 0:
         header_start_indices.append(header_start_index)
     header_start_index += 8
 
-# split at header, removing it
-frames = hexdata.split(header)
+header_start_indices.append(None)
+frames = [hexdata[header_start_indices[i]:header_start_indices[i+1]] for i in range(len(header_start_indices)-1)]
+
 
 # argument variables
 glitch_prob = 5
@@ -87,10 +86,7 @@ testval = 0
 frame_counter = 0
 frame_spacing = 1
 
-# start from index 1 - first index is blank
-for idx_frame, frame in enumerate(frames[1:]):
-    # once per frame
-    output_hex.append(header)
+for idx_frame, frame in enumerate(frames):
     num_glitches_this_frame = 0
     for idx_digit, digit in enumerate(frame):
         # don't glitch first frame (file header)
@@ -107,6 +103,7 @@ for idx_frame, frame in enumerate(frames[1:]):
                 (True, num_glitches_this_frame <= max_glitches_per_frame)[max_glitches_per_frame > 0] and 
                 idx_digit >= (len(frame) * frame_min) and
                 idx_digit <= (len(frame) * frame_max) and
+                idx_digit >= 8 and # leave header alone - first 8 digits
                 frame_counter == 0
             ):
                 digit = random.choice(hex_digits[hex_min:hex_max + 1])
@@ -118,7 +115,6 @@ for idx_frame, frame in enumerate(frames[1:]):
     frame_counter += 1
     frame_counter %= frame_spacing
 
-# join frames using header as separator - note method is applied to separator, not iterable item!
 rejoined_frames = ''.join(output_hex)
 # 'wb' = 'write' + 'binary'; binascii.unhexlify converts ascii hex -> binary
 # args.output is second cli positional argument
@@ -127,6 +123,6 @@ with open(args.output, 'wb') as output_file:
 
 # write to text file for diagnostics
 # with open('input_mp3.txt', 'w') as output_file_raw:
-#     output_file_raw.write(hexdata)
+#     output_file_raw.write(rejoined_frames)
 # with open('output_mp3.txt', 'w') as output_file: 
 #     output_file.write(rejoined_frames)
