@@ -1,5 +1,5 @@
 # MP3 Glitch
-Automates the process of glitching MP3s described in [this article](https://reillyspitzfaden.com/posts/2025/02/databending-part-2/). Note that this only works for constant bitrate (CBR) MP3s at the moment!
+Automates the process of glitching MP3s described in [this article](https://reillyspitzfaden.com/posts/2025/02/databending-part-2/). Should work for both constant bit rate (CBR) and variable bit rate (VBR) MP3s.
 
 ## Usage
 - Provide the name of an mp3 file in the same folder as the script to serve as an input, followed by the desired output file name

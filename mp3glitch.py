@@ -38,7 +38,6 @@ while hexdata.find("fff", header_start_index) >= 0:
 header_start_indices.append(None)
 frames = [hexdata[header_start_indices[i]:header_start_indices[i+1]] for i in range(len(header_start_indices)-1)]
 
-
 # argument variables
 glitch_prob = 5
 if args.prob:
