@@ -1,4 +1,4 @@
-# MP3 Glitch
+# mp3glitch
 Automates the process of glitching MP3s described in [this article](https://reillyspitzfaden.com/posts/2025/02/databending-part-2/). Should work for both constant bit rate (CBR) and variable bit rate (VBR) MP3s.
 
 ## Usage
