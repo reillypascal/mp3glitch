@@ -1,5 +1,9 @@
 # mp3glitch
-Automates the process of glitching MP3s described in [this article](https://reillyspitzfaden.com/posts/2025/02/databending-part-2/). Should work for both constant bit rate (CBR) and variable bit rate (VBR) MP3s.
+Python tool for glitching MP3s while leaving them playable. Includes many options to shape glitching amount, character, and timbre.
+
+The mechanics behind this are described in [this article](https://reillyspitzfaden.com/posts/2025/02/databending-part-2/), and I discuss using Python to do the glitching in [this article](https://reillyspitzfaden.com/posts/2025/04/databending-part-3/).
+
+Should work for both constant bit rate (CBR) and variable bit rate (VBR) MP3s.
 
 ## Usage
 - Provide the name of an mp3 file in the same folder as the script to serve as an input, followed by the desired output file name
