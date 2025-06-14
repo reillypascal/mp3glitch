@@ -114,9 +114,9 @@ for idx_frame, frame in enumerate(frames):
     frame_counter %= frame_spacing
 
 rejoined_frames = ''.join(output_hex)
-# if frames are an odd length, remove last character
+# if frames are an odd length, add "0"
 if (len(rejoined_frames) % 2 != 0):
-    rejoined_frames = rejoined_frames[:-1]
+    rejoined_frames = rejoined_frames + "0"
 # 'wb' = 'write' + 'binary'; binascii.unhexlify converts ascii hex -> binary
 # args.output is second cli positional argument
 with open(args.output, 'wb') as output_file:
