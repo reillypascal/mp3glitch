@@ -1,6 +1,6 @@
-# NOTES:
-# single-number glitch max is 4294967295 (0xffffffff)
-# more generally, pow(16, glitch_width) - 1
+# NOTE:
+#   single-number glitch max is 4294967295 (0xffffffff)
+#   more generally, pow(16, glitch_width) - 1
 
 import argparse
 import binascii
