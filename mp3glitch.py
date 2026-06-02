@@ -58,6 +58,7 @@ parser.add_argument(
 # key-value pairs with argument long names and values
 args = parser.parse_args()
 
+# def read_file()
 # args.input is first cli positional argument
 # 'rb' = 'read' + 'binary'; import file here; read as hex
 with open(args.input, "rb") as input_file:
@@ -77,6 +78,7 @@ frames = [
 ]
 
 
+# def config()
 # argument variables
 glitch_prob = 5
 if args.prob:
@@ -116,6 +118,8 @@ if args.limit:
 
 hex_digits = "0123456789abcdef"
 # strings are immutable, so need a new array
+
+# def apply_glitches()
 output_hex = []
 
 # variables defined outside test block
@@ -144,7 +148,7 @@ for idx_frame, frame in enumerate(frames):
                 ]
                 and idx_digit >= (len(frame) * frame_min)
                 and idx_digit <= (len(frame) * frame_max)
-                and idx_digit >= 8  # leave header alone - first 8 digits
+                and idx_digit >= 8  # leave header alone - first 8 digits
                 and frame_counter == 0
             ):
                 digit = random.choice(hex_digits[hex_min : hex_max + 1])
@@ -157,6 +161,7 @@ for idx_frame, frame in enumerate(frames):
     frame_counter += 1
     frame_counter %= frame_spacing
 
+# def write_file()
 rejoined_frames = "".join(output_hex)
 # if frames are an odd length, add "0"
 if len(rejoined_frames) % 2 != 0:
