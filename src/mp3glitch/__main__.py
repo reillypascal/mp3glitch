@@ -9,7 +9,7 @@ def main():
 
 
 if __name__ == "__main__":
-    # receives exit code from main() (here, None)
+    # receives exit code from main() (here, 0/1)
     sys.exit(main())
 
 if not __package__:

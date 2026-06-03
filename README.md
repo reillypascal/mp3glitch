@@ -8,20 +8,21 @@ Should work for both constant bit rate (CBR) and variable bit rate (VBR) MP3s.
 
 ## Usage
 
-- Provide the name of an mp3 file in the same folder as the script to serve as an input, followed by the desired output file name
+- Provide the path of an input MP3 file, followed by the desired output file name, OR provide an input and output directory. NOTE: input/output must both be either files or directories.
 
-```sh
-python3 mp3glitch.py <input_file_name> <output_file_name>
+```bash
+mp3glitch <input_file_name> <output_file_name>
 ```
 
 - Options
-    - `-h, --help`       show this help message and exit
-    - `-p, --prob`       percent probability of glitching (float)
-    - `-m, --hexmin`     decimal representation of minimum hex value to insert (int)
-    - `-M, --hexmax`     decimal representation of maximum hex value to insert (int)
-    - `-f, --framemin`   minimum position in frame to glitch (float, 0-1)
-    - `-F, --framemax`   maximum position in frame to glitch (float, 0-1)
+    - `-h, --help` show this help message and exit
+    - `-p, --prob` percent probability of glitching (float)
+    - `-m, --hexmin` decimal representation of minimum hex value to insert (int)
+    - `-M, --hexmax` decimal representation of maximum hex value to insert (int)
+    - `-f, --framemin` minimum position in frame to glitch (float, 0-1)
+    - `-F, --framemax` maximum position in frame to glitch (float, 0-1)
     - `-s, --spacingmin` minimum spacing between glitched frames (int)
     - `-S, --spacingmax` maximum spacing between glitched frames (int)
-    - `-w, --width`      number of hex digits to insert in each glitch (int)
-    - `-l, --limit`      max number of glitches per frame (0 = no limit) (int)
+    - `-w, --width` number of hex digits to insert in each glitch (int)
+    - `-l, --limit` max number of glitches per frame (0 = no limit) (int)
+
