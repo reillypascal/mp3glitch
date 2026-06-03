@@ -1,6 +1,4 @@
 import argparse
-from os import path
-from os import walk
 from pathlib import Path
 import mp3glitch.fn as fn
 
@@ -64,11 +62,14 @@ args = parser.parse_args()
 
 
 def app():
-    config = fn.run_config(args)
+    config = fn.make_config(args)
+    input_path = Path(args.input)
+    output_path = Path(args.output)
 
     # process single in/out file if input is a file and output is not a directory
+    # TODO: try using pathlib PurePath to check if input path *could be* a file
     # NOTE: since output file wouldn't exist, can't check if output is a file!
-    if path.isfile(args.input) and not path.isdir(args.output):
+    if input_path.is_file() and not output_path.is_dir():
         frames = fn.read_file(args.input)
         output_hex = fn.apply_glitches(frames, config)
         fn.write_file(output_hex, args.output)
@@ -77,22 +78,17 @@ def app():
 
     # iterate over directory/-ies
     # glitch/write all files to output dir (flat hierarchy)
-    if path.isdir(args.input) and path.isdir(args.output):
-        mp3_files = [
-            f"{root}/{dir if dir else ""}/{file}"
-            for root, dir, files in walk(args.input)
-            for file in files
-            if file.endswith(".mp3")
-        ]
+    if input_path.is_dir() and output_path.is_dir():
+        mp3_files = input_path.glob("**/*.mp3")
         for file in mp3_files:
             frames = fn.read_file(file)
             output_hex = fn.apply_glitches(frames, config)
-            fn.write_file(output_hex, f"{args.output}/{path.basename(file)}")
+            fn.write_file(output_hex, str(output_path / file.name))
 
         return 0
 
     # if one of input/output is a directory, but the other isn't, error
-    if path.isdir(f"{args.input}") != path.isdir(f"{args.output}"):
+    if input_path.is_dir() != output_path.is_dir():
         print("Error: input and output types (file or directory) must match")
 
         # TODO: better to use error types than exit codes?

@@ -2,7 +2,7 @@ import binascii
 import random
 
 
-def run_config(args):
+def make_config(args):
     config = {
         "glitch_prob": 5,
         "hex_min": 0,
