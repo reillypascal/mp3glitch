@@ -5,7 +5,7 @@ import sys
 def main():
     from mp3glitch.cli import app
 
-    app()
+    return app()
 
 
 if __name__ == "__main__":

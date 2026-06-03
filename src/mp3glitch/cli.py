@@ -67,7 +67,7 @@ def app():
     output_path = Path(args.output)
 
     # process single in/out file if input is a file and output is not a directory
-    # TODO: try using pathlib PurePath to check if input path *could be* a file
+    # TODO: try using pathlib PurePath to check if output path *could be* a file
     # NOTE: since output file wouldn't exist, can't check if output is a file!
     if input_path.is_file() and not output_path.is_dir():
         frames = fn.read_file(args.input)
