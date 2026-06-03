@@ -10,10 +10,7 @@ input/
 output/
 storage/
 # files
-*.dot
-*.gv
-*.png
+*.mp3
 *.py[codz]
-*.sh
-*.svg
 .DS_Store
+
