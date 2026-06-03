@@ -28,4 +28,4 @@ mp3glitch <input_file_or_directory> <output_file_or_directory>
 
 NOTE: while the resulting MP3 is still playable, it will likely have e.g., denormal values, and with greater glitch probability or `hexmax` values, this can still cause difficulty with playback. When composing with this tool, I usually use FFmpeg to convert a WAV sample to MP3, glitch it, and then convert back to WAV in order to have the noisy artifacts without the playback difficulty.
 
-The `scripts/` directory contains example Bash (Bash 4+ only) and Zsh scripts to perform this on batches of files, deleting the unused MP3 files along the way. MAKE SURE you understand what the scripts do before using them! They use the `rm` action on the MP3 files, which is permanent.
+<!-- The `scripts/` directory contains example Bash (Bash 4+ only) and Zsh scripts to perform this on batches of files, deleting the unused MP3 files along the way. MAKE SURE you understand what the scripts do before using them! They use the `rm` action on the MP3 files, which is permanent. -->

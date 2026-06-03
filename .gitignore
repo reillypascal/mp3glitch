@@ -8,6 +8,7 @@ __pycache__/
 build/
 input/
 output/
+scripts/
 storage/
 # files
 *.mp3
