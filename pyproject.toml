@@ -1,0 +1,20 @@
+[project]
+name = "mp3glitch"
+version = "0.1.0"
+description = "Python tool for glitching MP3s while leaving them playable. Includes many options to shape glitching amount, character, and timbre."
+authors = [
+  { name = "Reilly Spitzfaden", email = "reillypascal@gmail.com" },
+]
+dependencies = ["mp3glitch"]
+requires-python = "==3.14.*"
+readme = "README.md"
+license = { text = "MIT" }
+
+[project.scripts]
+mp3glitch = "mp3glitch.__main__:main"
+
+[project.entry-points."pipx.run"]
+mp3glitch = "mp3glitch.__main__:main"
+
+[tool.pdm]
+distribution = true

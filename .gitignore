@@ -1,9 +1,19 @@
-.DS_Store
-input_mp3.txt
-output_mp3.txt
-glitched.mp3
-output.mp3
-test.py
+# directories
+*.egg-info
+.mypy_cache/
+.pdm-python
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+build/
 input/
 output/
 storage/
+# files
+*.dot
+*.gv
+*.png
+*.py[codz]
+*.sh
+*.svg
+.DS_Store
